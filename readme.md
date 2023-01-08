@@ -67,4 +67,114 @@ clean build
 clean install
 
 
+manually move /System/Library/Frameworks/System.framework/Versions/B/PrivateHeaders/architecture
 
+to /System/Library/Frameworks/System.framework/PrivateHeaders
+
+
+success
+
+
+indr issues with 10.1.5 cctools
+
+attempt build 10.0 cctools
+
+/usr/bin/ld: can't locate file for: -lcrt0.o
+
+
+lets attempt an older Csu
+
+
+well i'll be darned. 
+
+https://opensource.apple.com/source/gcc/gcc-1495/README.Apple
+
+PREREQUISITES
+
+Presumably if you're reading this, you've figured out how to get the
+sources. :-) But just to be complete, these sources are available from
+the Darwin repository at opensource.apple.com, CVS module "gcc3".  See
+http://www.opensource.apple.com/tools/cvs if this isn't enough info
+yet.
+
+If you want C++ exception handling to work, you will need a modified
+crt1.o. (crt1.o is the bit of code that sets up for execution and
+calls your program's main().) The modified crt1.o is standard in 10.2,
+but 10.1, you will need to set it up yourself.
+
+If you can't get a modified crt1.o from somebody else, you can patch a
+copy of the sources to the "Csu" project and build it yourself.  The
+patch is included in this directory, as "csu-patch".  The build is
+easy, just say "make" in the Csu directory, and then copy the crt1.o
+to /usr/lib/crt1.o (as usual, it's prudent to keep around a copy of
+the original crt1.o, just in case).  You will need to have built the
+"cctools" project as well, in order to get the helper tool "indr"
+(which is expected to be installed as /usr/local/bin/indr).
+
+BUILDING, THE APPLE WAY
+
+To build things the Apple way, just say (in the source directory)
+
+	mkdir -p build/obj build/dst build/sym
+	gnumake install RC_OS=macos RC_ARCHS=ppc TARGETS=ppc \
+		SRCROOT=`pwd` OBJROOT=`pwd`/build/obj \
+		DSTROOT=`pwd`/build/dst SYMROOT=`pwd`/build/sym
+
+This will configure and then do a full bootstrap build, with all the
+results going into the subdirectory build/ that you created.  The
+final results will be in the "dest root" directory build/dst, in the
+form of an image of the installed directory structure.  The drivers
+and other user-visible tools have a "3" suffixed, so for instance the
+driver is /usr/bin/gcc3, and the demangler is /usr/bin/c++filt3.
+
+To install the results, become root and do
+
+	ditto build/dst /
+
+Various knobs and switches are available, but even so, the Apple
+makefile machinery is mainly designed for mass builds of all the
+projects that make up Darwin and/or Mac OS X, and is thus not as
+flexible as the standard GCC build process.
+
+To build for i386 Darwin, set TARGETS=i386.  To build fat, set
+RC_ARCHS='i386 ppc' TARGETS='i386 ppc'.  Note that you must have a
+complete set of fat libraries and i386-targeting cctools for this
+all to work.
+
+You can set the four *ROOT variables to point anywhere, but they must
+always be absolute pathnames.
+
+This way of building may or may not work on non-Macs, and if it
+doesn't, you're on your own.
+
+
+
+
+https://opensource.apple.com/source/gcc3/gcc3-1161/csu-patch
+
+
+digging reveals 
+
+https://opensource.apple.com/source/cctools/cctools-384.1/
+
+a tarball is found on
+
+http://src.gnu-darwin.org/DarwinSourceArchive/apsl/
+
+http://src.gnu-darwin.org/DarwinSourceArchive/apsl/cctools-384.1.tar.gz
+
+
+it looks more promising.
+
+watching it build.
+
+
+we receive the same error. 
+
+
+going on a binary hunt.
+https://gist.github.com/theevilbit/906149b8e7273cee5df41a2d5f68ba48
+
+
+downloading darwin isos looking for elusive object files crt0.o and crt1.o
+a binary mach-0 for indr would work too

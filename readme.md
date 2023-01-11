@@ -178,3 +178,57 @@ https://gist.github.com/theevilbit/906149b8e7273cee5df41a2d5f68ba48
 
 downloading darwin isos looking for elusive object files crt0.o and crt1.o
 a binary mach-0 for indr would work too
+
+
+warning here be dragons
+https://ia800600.us.archive.org/19/items/v6-manual/v6-manual.pdf
+
+our research into crt0 has lead us down dark paths into unix v6 manual. a bad omen
+
+"The diagnostics produced by C itself are intended to be self-explanatory. Occasional messages may be pro-
+duced by the assembler or loader. Of these, the most mystifying are from the assembler, in particular ‘‘m,’’
+which means a multiply-defined external symbol (function or data)."
+        -- some ancient sage
+
+fantastic...
+
+
+
+
+====
+
+
+could it be that i was a fool? blind like a child, unable to see clearly in the simplicity of it all?
+
+I maybe forgot to install dev tools for 10.1.
+
+I could be coasting on a semi complete development environment, hence the missing crt0.o which the documentation insists should exists, which builds depend on. Perhaps it is simple.
+
+I shall test.
+
+
+=-=-=-=-=-=-
+
+jan 10 2023
+
+
+some progress has been made, albeit slowly.
+
+
+This document explains some otherwise hidden details about build order and build execution!
+https://www-jlc.kek.jp/~fujiik/macosx/memo/HEPonX.html
+
+Using this document I was able to begin to make progress on building cctools
+
+I need to fix blockers on the compliation of the xnu kernel, to use the headers, to build cctools!
+
+
+this document may hold some secrets about compliling XNU 
+
+https://theswissbay.ch/pdf/Gentoomen%20Library/Programming/Misc/Manning.Publications.Company.Programming.Mac.OS.X.A.Guide.for.Unix.Developers.eBook-DDU.pdf
+
+> Chapter 8 introduces Jaguar, Apple's most recent Mac OS X release. It pre- ... May 30 14:51:26 PDT 2002; root:xnu/xnu-201.42.3.obj~1/RELEASE_PPC Power.
+
+
+
+

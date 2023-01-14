@@ -258,3 +258,48 @@ I need to download and extract more cd images.
 
 
 Searching for crt0.o using find on the 10.2 cds was also fruitless. I may need to install in qemu and hunt the live system.
+
+
+
+TRY THIS NEXT TIME:
+mkdir -p build/obj build/dst build/sym
+gnumake install RC_OS=macos RC_ARCHS=ppc TARGETS=ppc \
+SRCROOT=`pwd` OBJROOT=`pwd`/build/obj \
+DSTROOT=`pwd`/build/dst SYMROOT=`pwd`/build/sym
+
+
+
+this eliminated 2 errors in 
+bash-2.05b$ cp -r /usr/include/mach EXTERNAL_HEADERS
+bash-2.05b$ make exporthdrs
+
+
+
+
+==--==--==--==--==--==
+
+It is my birthday today.
+
+I have slain 2 dragons. crt0.o and indr lay at my feet, bleeding.
+
+Reading again my cctools error i decided to check if otool already existed on my system, the utility blocking my build. It did, so I thought to try again to bypass and build indr directly. 
+I had previously attempted this but foolishly did not closely inspect the directory after build.
+indr.NEW was a valid ppc executable sitting right there! 
+When i attempted to run it however i was greeted with a familiar Illegal Instruction error.have
+
+Using a copy of cctools-384.1 i was able to build a WORKING copy of indr.NEW and manually placed it into my path.
+
+Csu built my fabled crt0.o with the gcc patch applied.
+
+
+I now face libm as a foe, however on inspection apple never released a libm source file.
+
+Some digging on ancient message posts revealed the libm implementation is inside Libsystem.
+
+Libsystem needs a few things like ncurses which i had previously built and LibInfo among other .a files.
+
+
+New dragons fly above me and circle
+
+
+
